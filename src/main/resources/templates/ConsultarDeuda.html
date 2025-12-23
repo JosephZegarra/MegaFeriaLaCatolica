@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Consultar Deuda - Mega Feria</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-cover bg-center bg-no-repeat min-h-screen flex flex-col text-white"
+      style="background-image: url('/Imagen/SecretarioFin.jpg');">
+
+<div th:replace="Orden/Head :: common-header"></div>
+
+<div class="flex-grow flex items-center justify-center py-10 px-4">
+  <div class="bg-white text-gray-800 rounded-2xl shadow-2xl p-8 max-w-3xl w-full border-t-4 border-green-700">
+
+    <div class="flex items-center justify-center mb-6">
+      <img src="/Imagen/Logo.png" alt="Logo" class="w-14 h-14 rounded-full border-2 border-green-700 mr-3">
+      <h1 class="text-2xl font-extrabold text-green-700 tracking-tight">Mega Feria de la Católica</h1>
+    </div>
+
+    <h2 class="text-center text-xl font-bold text-gray-800 mb-6">Consultar Deuda</h2>
+
+    <!-- Buscar socio -->
+    <form th:action="@{/deudas/deudacobrarsocio}" method="GET" class="space-y-5 mb-8">
+      <div>
+        <label for="numero_carnet" class="text-sm text-gray-600 mb-1 block">Número de Carnet</label>
+        <input type="text" name="numero_carnet" id="numero_carnet" required
+               placeholder="Ingrese el número de carnet"
+               class="w-full px-4 py-3 rounded-lg border border-green-700  text-black">
+      </div>
+      <button type="submit"
+              class="w-full bg-green-700 hover:bg-green-700 text-white font-semibold py-3 rounded-lg shadow-md">
+        Consultar Deuda
+      </button>
+    </form>
+
+    <!-- Mostrar deudas -->
+    <div th:if="${deudas != null}">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Deudas del Socio</h3>
+
+      <table class="min-w-full border border-gray-300 rounded-lg overflow-hidden text-sm text-gray-800">
+        <thead class="bg-green-700 text-white">
+        <tr>
+
+          <th class="py-2 px-4 text-left">Monto (S/)</th>
+          <th class="py-2 px-4 text-left">Estado</th>
+          <th class="py-2 px-4 text-center">Acción</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="deuda : ${deudas}" class="border-b hover:bg-gray-50">
+
+          <td class="py-2 px-4" th:text="${deuda.saldopendiente}">150.00</td>
+          <td class="py-2 px-4" th:text="${deuda.estado}">Pendiente</td>
+          <td class="py-2 px-4 text-center">
+            <a th:href="@{/pagos/realizarpago(iddeuda=${deuda.iddeuda})}"
+                   class="bg-green-600 hover:bg-green-700 text-white py-1.5 px-2.5 rounded-lg text-sm">
+                    Pagar
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div class="mt-6 text-right font-bold text-gray-900">
+        Total Deuda: <span th:text="'S/ ' + ${totalDeuda}"></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div th:replace="Orden/Footer :: common-footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+      // Obtener los mensajes (pueden venir del model o como flash attributes)
+      let mensajeError = /*[[${error}]]*/ null;
+      let mensajeExito = /*[[${exito}]]*/ null;
+      let mensajeInfo = /*[[${info}]]*/ null;
+
+      // Mostrar mensaje de error si existe
+      if (mensajeError !== null && mensajeError !== undefined) {
+          Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: mensajeError,
+              confirmButtonColor: '#dc2626',
+              background: '#fef9ff'
+          });
+      }
+
+      // Mostrar mensaje de éxito si existe
+      if (mensajeExito !== null && mensajeExito !== undefined) {
+          Swal.fire({
+              icon: 'success',
+              title: '¡Éxito!',
+              text: mensajeExito,
+              confirmButtonColor: '#16a34a',
+              background: '#fef9ff'
+          });
+      }
+       if (mensajeInfo) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Información',
+            text: mensajeInfo,
+            confirmButtonColor: '#2563eb',
+            background: '#f0f9ff'
+        });
+    }
+  /*]]>*/
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+      const menuButton = document.getElementById("menuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      if (menuButton && mobileMenu) {
+          menuButton.addEventListener("click", () => {
+              mobileMenu.classList.toggle("hidden");
+          });
+      }
+  });
+</script>
+
+
+
+</body>
+</html>

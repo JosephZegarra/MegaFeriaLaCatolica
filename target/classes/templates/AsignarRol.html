@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asignar Rol</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" th:href="@{/css/christi-theme.css}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="icon" th:href="@{/Imagen/Logo.png}" />
+    <style>
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        input, select, textarea {
+         background-color: white; color: black ;
+         }
+
+        /* Animación sutil para hover de botón */
+        .btn-primary {
+          transition: all 0.3s ease;
+        }
+
+        input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active
+         { -webkit-box-shadow: 0 0 0px 1000px white inset !important; -webkit-text-fill-color: black !important; }
+
+        input::-ms-reveal, input::-ms-clear { display: none; }
+        /* Safari y otros navegadores basados en WebKit */
+        input[type="password"]::-webkit-textfield-decoration-container
+        { display: none; }
+    </style>
+</head>
+<!--
+<body >
+
+
+<div id="webcrumbs" class="bg-[#0b1120] text-white min-h-screen flex flex-col" >
+    <div th:replace="Orden/Head :: common-header"></div>
+    <div class="flex-grow flex items-center justify-center py-10 px-4">
+        <div class="bg-white text-gray-800 rounded-2xl shadow-2xl p-8 max-w-md w-full border-t-4 border-red-600">
+
+            <div class="flex items-center justify-center mb-6">
+                <img src="/Imagen/Logo.png" alt="Logo" class="w-14 h-14 rounded-full border-2 border-red-600 mr-3">
+                <h1 class="text-2xl font-extrabold text-red-600 tracking-tight">Mega Feria de la Católica</h1>
+            </div>
+
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-extrabold text-gray-900 tracking-wide relative inline-block">
+                    Asignar rol al Socio
+                    <span class="block w-16 h-1 bg-red-600 mx-auto mt-2 rounded-full"></span>
+                </h2>
+
+            </div>
+
+            <form class="p-6 space-y-5" th:action="@{/sociorol/guardarrol}" method="post">
+
+
+                <div class="relative">
+                    <label class="text-sm text-gray-600 mb-1 block">Número carnet</label>
+                    <input class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"
+                           type="text" name="numero_carnet" required/>
+                    <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined">lock</span>
+                </div>
+                <div class="relative">
+                    <label class="text-sm text-gray-600 mb-1 block">Selecciona un rol</label>
+                    <select
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"
+                            name="rol"
+                            required>
+                        <option value="" disabled selected>Seleccione</option>
+                        <option value="Presidente">Presidente</option>
+                        <option value="Tesorera">Tesorera</option>
+                        <option value="Secretaria">Secretaria</option>
+                        <option value="Dirigente">Dirigente</option>
+                        <option value="Delegadoporrubro">Delegado por rubro</option>
+                        <option value="Vocal">Vocal</option>
+                    </select>
+                    <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined">arrow_drop_down</span>
+                </div>
+
+                <div class="relative">
+                    <label for="fechainicio" class="text-sm text-gray-600 mb-1 block">Fecha de Inicio:</label>
+                    <input type="date" id="fechainicio" name="fechainicio"
+                           th:attr="min=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}"
+                           class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"
+                           onchange="document.getElementById('fechafin').min = this.value"
+                           required>
+                    <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined pointer-events-none">arrow_drop_down</span>
+                </div>
+
+
+                <div class="relative">
+                    <label for="fechafin" class="text-sm text-gray-600 mb-1 block">Fecha final de Asignación:</label>
+                    <input type="date" id="fechafin" name="fechafin"
+                           th:attr="min=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}"
+                           class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"
+                           required>
+                    <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined pointer-events-none">arrow_drop_down</span>
+                </div>
+
+                <div class="pt-2">
+
+                    <button type="submit"
+                            class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-lg shadow-md transition-colors duration-300">
+                        Registrar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+-->
+<body class="min-h-screen flex flex-col" style="background-image: url('/Imagen/Portada.jpg');">
+
+<div th:replace="Orden/Head :: common-header"></div>
+
+<div id="webcrumbs" class="flex-grow flex items-center justify-center py-10 px-4">
+    <div class="bg-white text-gray-800 rounded-2xl shadow-2xl p-10 max-w-md w-full border-t-4 border-green-700">
+
+        <div class="flex items-center justify-center mb-6">
+            <img src="/Imagen/Logo.png" alt="Logo" class="w-14 h-14 rounded-full border-2 border-green-700 mr-3">
+            <h1 class="text-2xl font-bold text-green-700 tracking-tight" style="color: var(--christi-700);">Mega Feria de la Católica</h1>
+        </div>
+
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-extrabold text-gray-900 tracking-wide relative inline-block">
+                Asignar rol al Socio
+                <span class="block w-16 h-1 mx-auto mt-2 rounded-full" style="background-color: var(--christi-600);"></span>
+            </h2>
+        </div>
+
+        <form class="p-6 space-y-5" th:action="@{/sociorol/guardarrol}" method="post">
+
+            <div class="relative">
+                <label class="text-sm text-gray-600 mb-1 block">Número carnet</label>
+                <input class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2" style="--tw-ring-color: var(--christi-600);"
+                       type="text" name="numero_carnet" required/>
+                <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined">lock</span>
+            </div>
+
+            <div class="relative">
+                <label class="text-sm text-gray-600 mb-1 block">Selecciona un rol</label>
+                <select
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2" style="--tw-ring-color: var(--christi-600);"
+                        name="rol"
+                        required>
+                    <option value="" disabled selected>Seleccione</option>
+                    <option value="Presidente">Presidente</option>
+                    <option value="Tesorera">Tesorera</option>
+                    <option value="Secretaria">Secretaria</option>
+                    <option value="Dirigente">Dirigente</option>
+                    <option value="Delegadoporrubro">Delegado por rubro</option>
+                    <option value="Vocal">Vocal</option>
+                </select>
+                <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined">arrow_drop_down</span>
+            </div>
+
+            <div class="relative">
+                <label for="fechainicio" class="text-sm text-gray-600 mb-1 block">Fecha de Inicio:</label>
+                <input type="date" id="fechainicio" name="fechainicio"
+                       th:attr="min=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}"
+                       onchange="document.getElementById('fechafin').min = this.value"
+                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2" style="--tw-ring-color: var(--christi-600);"
+                       required>
+                <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined pointer-events-none">arrow_drop_down</span>
+            </div>
+
+            <div class="relative">
+                <label for="fechafin" class="text-sm text-gray-600 mb-1 block">Fecha final de Asignación:</label>
+                <input type="date" id="fechafin" name="fechafin"
+                       th:attr="min=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}"
+                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2" style="--tw-ring-color: var(--christi-600);"
+                       required>
+                <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined pointer-events-none">arrow_drop_down</span>
+            </div>
+
+            <div class="pt-2">
+                <button type="submit" class="w-full bg-green-700 hover:bg-green-700 text-white font-semibold py-3 rounded-lg shadow-md transition-all">
+                    Registrar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div th:replace="Orden/Footer :: common-footer"></div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const menuButton = document.getElementById("menuBtn");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        if (menuButton && mobileMenu) {
+            menuButton.addEventListener("click", () => {
+                mobileMenu.classList.toggle("hidden");
+            });
+        }
+    });
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+        // Obtener los mensajes (pueden venir del model o como flash attributes)
+        let mensajeError = /*[[${error}]]*/ null;
+        let mensajeExito = /*[[${Exito}]]*/ null;
+
+        // Mostrar mensaje de error si existe
+        if (mensajeError !== null && mensajeError !== undefined) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: mensajeError,
+                confirmButtonColor: '#dc2626',
+                background: '#fef9ff'
+            });
+        }
+
+        // Mostrar mensaje de éxito si existe
+        if (mensajeExito !== null && mensajeExito !== undefined) {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: mensajeExito,
+                confirmButtonColor: '#7e22ce',
+                background: '#fef9ff'
+            });
+        }
+    /*]]>*/
+</script>
+</body>
+</html>

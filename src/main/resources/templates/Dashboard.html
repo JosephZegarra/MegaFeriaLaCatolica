@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Mega Feria</title>
+    <link rel="stylesheet" th:href="@{/css/christi-theme.css}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body body class="bg-green-50 text-gray-800 min-h-screen flex flex-col">
+
+<div th:replace="Orden/Head :: common-header"></div>
+
+<main class="max-w-7xl mx-auto p-6">
+
+    <!-- ---------- TARJETAS KPI ---------- -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h3 class="text-sm text-gray-600">Total Socios</h3>
+            <p class="text-3xl font-bold text-green-800"
+               th:text="${dashboardData.totalSocios}">0</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h3 class="text-sm text-gray-600">Activos</h3>
+            <p class="text-3xl font-bold text-blue-700"
+               th:text="${dashboardData.sociosActivos}">0</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h3 class="text-sm text-gray-600">Inactivos</h3>
+            <p class="text-3xl font-bold text-gray-700"
+               th:text="${dashboardData.sociosInactivos}">0</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h3 class="text-sm text-gray-600">Bloqueados</h3>
+            <p class="text-3xl font-bold text-red-700"
+               th:text="${dashboardData.sociosBloqueados}">0</p>
+        </div>
+
+    </div>
+
+    <!-- ---------- GRÁFICO TENDENCIA ----------->
+    <!--
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <h3 class="text-lg font-semibold">Tendencia de Asistencia (últimos 7 días)</h3>
+        <canvas id="chartTendencia" height="120"></canvas>
+    </div>
+    -->
+
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <h3 class="text-lg font-semibold">Ingresos / Egresos (Últimos 7 días)</h3>
+        <table class="w-full text-left border-collapse">
+            <thead>
+            <tr class="border-b bg-green-200">
+                <th class="py-2 px-4">Fecha</th>
+                <th class="py-2 px-4">Ingresos</th>
+                <th class="py-2 px-4">Egresos</th>
+                <th class="py-2 px-4">Saldo</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="m : ${movimientos}" class="border-b bg-white hover:bg-green-50 transition duration-150">
+                <td class="py-2 px-4" th:text="${m.fecha}"></td>
+                <td class="py-2 px-4" th:text="${m.ingresos}"></td>
+                <td class="py-2 px-4" th:text="${m.egresos}"></td>
+                <td class="py-2 px-4" th:text="${m.saldo}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+
+    <!-- ---------- RESUMEN ASISTENCIA DIARIA ---------- -->
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <h3 class="text-lg font-semibold">Asistencia Diaria (últimos 7 días)</h3>
+
+        <table class="w-full text-left border-collapse">
+            <thead>
+            <tr class="border-b bg-green-200">
+                <th class="py-2 px-4">Fecha</th>
+                <th class="py-2 px-4">Presentes</th>
+                <th class="py-2 px-4">Ausentes</th>
+                <th class="py-2 px-4">Justificados</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="row : ${dashboardData.asistenciaDiaria}" class="border-b bg-white hover:bg-green-50 transition duration-150">
+                <td class="py-2 px-4" th:text="${row.fecha}">2025-12-01</td>
+                <td class="py-2 px-4" th:text="${row.totalPresente}">0</td>
+                <td class="py-2 px-4" th:text="${row.totalAusente}">0</td>
+                <td class="py-2 px-4" th:text="${row.totalJustificado}">0</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ---------- ESTADO DE ASISTENCIA ---------- -->
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <h3 class="text-lg font-semibold">Asistencia por Estado</h3>
+        <canvas id="chartEstado" height="120"></canvas>
+    </div>
+
+    <!-- ---------- TOP DEUDORES ---------- -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h3 class="text-lg font-semibold mb-4">Top Deudores</h3>
+
+        <table class="w-full">
+            <thead>
+            <tr class="border-b">
+                <th class="text-left py-2">Socio</th>
+                <th class="text-right py-2">Total Deuda (S/)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="row : ${dashboardData.topDeudores}" class="border-b">
+                <td class="py-2" th:text="${row[0]}">Nombre</td>
+                <td class="py-2 text-right" th:text="${row[1]}">0</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</main>
+<div th:replace="Orden/Footer :: common-footer"></div>
+<!-- ================================
+     JAVASCRIPT PARA LOS GRÁFICOS
+================================ -->
+<script th:inline="javascript">
+    // -------------------------------
+    // ESTADO DE ASISTENCIA
+    // -------------------------------
+    let estado = /*[[${dashboardData.asistenciaEstado}]]*/ [];
+
+    let estadoLabels = estado.map(item => item[0]);
+    let estadoValues = estado.map(item => Number(item[1]));
+
+    new Chart(document.getElementById('chartEstado'), {
+        type: 'bar',
+        data: {
+            labels: estadoLabels,
+            datasets: [{
+                label: 'Cantidad',
+                data: estadoValues,
+                backgroundColor: ['#4CAF50','#FFC107','#F44336']
+            }]
+        }
+    });
+
+</script>
+<script>
+    new Chart(document.getElementById('chartEstado'), {
+    type: 'bar',
+    data: {
+        labels: estadoLabels,
+        datasets: [{
+            label: 'Cantidad',
+            data: estadoValues,
+            backgroundColor: ['#2E7D32','#66BB6A','#A5D6A7'] // verdes de tu branding
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { labels: { color: '#1B5E20', font: { weight: 'bold' } } }
+        },
+        scales: {
+            x: { ticks: { color: '#1B5E20' } },
+            y: { ticks: { color: '#1B5E20' } }
+        }
+    }
+});
+
+</script>
+</body>
+</html>

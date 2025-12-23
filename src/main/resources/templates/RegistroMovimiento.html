@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registrar de Ingresos y Egresos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" th:href="@{/css/christi-theme.css}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  <link rel="icon" th:href="@{/Imagen/Logo.png}" />
+  <style>
+
+
+    input, select, textarea {
+     background-color: white; color: black ;
+     }
+
+    /* Animación sutil para hover de botón */
+    .btn-primary {
+      transition: all 0.3s ease;
+    }
+
+    input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active
+     { -webkit-box-shadow: 0 0 0px 1000px white inset !important; -webkit-text-fill-color: black !important; }
+
+    input::-ms-reveal, input::-ms-clear { display: none; }
+    /* Safari y otros navegadores basados en WebKit */
+    input[type="password"]::-webkit-textfield-decoration-container
+    { display: none; }
+  </style>
+</head>
+<body  class="bg-cover bg-center bg-no-repeat min-h-screen flex flex-col text-white" style="background-image: url('/Imagen/SecretarioFin.jpg');">
+
+<header class="bg-[#C5E8A9] backdrop-blur-md text-black shadow-lg sticky top-0 z-50">
+  <div class="w-full px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+      <img th:src="@{/Imagen/Logo.png}" alt="Logo" class="w-14 h-14 rounded-full border-2 border-green-700" />
+      <h1 class="text-3xl md:text-4xl font-extrabold text-green-800 tracking-tight">
+        Mega Feria de la Católica
+      </h1>
+    </div>
+
+
+    <nav class="hidden md:flex space-x-8 text-lg font-semibold">
+      <button
+              onclick="window.history.back()"
+              class="hover:text-green-700 transition">
+        Página Anterior
+      </button>
+      <a th:href="@{/paginas/verEgresos}" class="hover:text-green-700 transition">Ver Egresos</a>
+      <a th:href="@{/paginas/registrarmovimiento}" class="hover:text-green-700 transition">Registrar Movimiento </a>
+      <a th:href="@{/paginas/logout}" class="hover:text-green-700 transition">Cerrar Sesión</a>
+    </nav>
+
+    <button id="menuBtn" class="md:hidden text-3xl text-green-900 hover:text-green-700">
+      ☰
+    </button>
+  </div>
+
+
+  <div id="mobileMenu" class="hidden flex-col space-y-3 bg-[#C5E8A9] text-green-900 text-center py-4 md:hidden transition-all duration-300">
+    <a th:href="@{/paginas/verEgresos}" class="block py-2 hover:text-green-700 transition">Menu Secretaria</a>
+    <a th:href="@{/paginas/registrarmovimiento}" class="block py-2 hover:text-green-700 transition">Deudas</a>
+    <a th:href="@{/paginas/logout}" class="block py-2 hover:text-green-700 transition">Comunicaciones</a>
+    <a href="#perfil" class="block py-2 hover:text-green-700 transition">Mi Perfil</a>
+  </div>
+
+
+</header>
+
+<div id="webcrumbs" class="bg-transparent text-white min-h-screen flex flex-col" >
+
+
+  <div class="flex-grow flex items-center justify-center py-10 px-4">
+    <div class="bg-white text-gray-800 rounded-2xl shadow-2xl p-8 max-w-md w-full border-t-4 border-green-700">
+
+
+      <div class="flex items-center justify-center mb-6">
+        <img src="/Imagen/Logo.png" alt="Logo" class="w-14 h-14 rounded-full border-2 border-green-700 mr-3">
+        <h1 class="text-2xl font-extrabold text-green-700 tracking-tight">Mega Feria de la Católica</h1>
+      </div>
+
+
+      <div class="text-center mb-6">
+        <h2 class="text-2xl font-extrabold text-gray-900 tracking-wide relative inline-block">
+          Registrar Movimiento
+          <span class="block w-16 h-1 bg-green-700 mx-auto mt-2 rounded-full"></span>
+        </h2>
+
+      </div>
+      <form class="space-y-5" th:action="@{/movimiento/guardarmovimiento}" method="post">
+        <!--
+        <div class="space-y-5">-->
+        <!--<input type="hidden" name="idsocio"/>-->
+
+        <div class="relative">
+          <label class="text-sm text-gray-600 mb-1 block">Número carnet</label>
+          <input class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-700"
+                 type="text" name="numero_carnet" id="numero_carnet" required pattern="^CARNET-[0-9]+$" title="El formato debe ser CARNET- seguido de uno o más dígitos. Ejemplo: CARNET-1 o CARNET-12345"
+                 placeholder="Ejemplo: CARNET-001"
+          />
+
+          <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined">lock</span>
+        </div>
+
+        <div class="relative">
+          <label class="text-sm text-gray-600 mb-1 block">Tipo de Movimiento</label>
+          <select class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-700"
+                  name="tipo" required>
+            <option value="Ingreso">Ingreso</option>
+            <option value="Egreso">Egreso</option>
+          </select>
+          <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined">lock</span>
+        </div>
+
+        <div class="relative">
+          <label for="monto" class="text-sm text-gray-600 mb-1 block">Monto del movimiento a Registrar (S/)</label>
+          <input type="number"
+                 id="monto"
+                 name="monto"
+                 min="1"
+                 step="0.01"
+                 placeholder="Ingrese el monto del movimiento a registrar"
+                 required
+                 class="w-full px-4 py-3 rounded-lg border border-green-700 focus:outline-none focus:ring-2 focus:ring-red-600 text-black" />
+        </div>
+
+        <!--Campo para dialogo de texto -->
+        <div class="relative mt-4">
+          <label class="text-sm text-gray-600 mb-1 block">Descripción</label>
+          <textarea
+                  name="descripcion"
+                  rows="3"
+                  placeholder="Describe brevemente el motivo del ingreso o egreso..."
+                  class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-700 resize-none"
+                  required></textarea>
+          <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined">edit</span>
+        </div>
+
+
+
+
+        <!--<input type="hidden" name="correo" th:value="${socio.correo}"/>-->
+        <!--</div>-->
+
+
+
+        <div class="pt-2">
+
+          <button type="submit"
+                  class="w-full bg-green-700 hover:bg-green-700 text-white font-semibold py-3 rounded-lg shadow-md transition-colors duration-300">
+            Registrar
+          </button>
+        </div>
+
+
+      </form>
+    </div>
+
+  </div>
+</div>
+<div th:replace="Orden/Footer :: common-footer"></div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  const togglePassword = document.getElementById('togglePassword');
+const passwordInput = document.getElementById('contrasena');
+
+togglePassword.addEventListener('click', () => {
+  const isPassword = passwordInput.type === 'password';
+  passwordInput.type = isPassword ? 'text' : 'password';
+  togglePassword.textContent = isPassword ? 'visibility' : 'visibility_off';
+});
+
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+      const menuButton = document.getElementById("menuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      if (menuButton && mobileMenu) {
+          menuButton.addEventListener("click", () => {
+              mobileMenu.classList.toggle("hidden");
+          });
+      }
+  });
+</script>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+      // Obtener los mensajes (pueden venir del model o como flash attributes)
+      let mensajeError = /*[[${error}]]*/ null;
+      let mensajeExito = /*[[${Exito}]]*/ null;
+
+      // Mostrar mensaje de error si existe
+      if (mensajeError !== null && mensajeError !== undefined) {
+          Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: mensajeError,
+              confirmButtonColor: '#dc2626',
+              background: '#fef9ff'
+          });
+      }
+
+      // Mostrar mensaje de éxito si existe
+      if (mensajeExito !== null && mensajeExito !== undefined) {
+          Swal.fire({
+              icon: 'success',
+              title: '¡Éxito!',
+              text: mensajeExito,
+              confirmButtonColor: '#7e22ce',
+              background: '#fef9ff'
+          });
+      }
+  /*]]>*/
+</script>
+<script>
+  <script>
+const telefonoInput = document.getElementById('telefono');
+
+telefonoInput.addEventListener('input', () => {
+  // Eliminar todo lo que no sea número
+  telefonoInput.value = telefonoInput.value.replace(/\D/g, '');
+
+  // Si tiene más de 12 dígitos, cortar
+  if (telefonoInput.value.length > 12) {
+    telefonoInput.value = telefonoInput.value.slice(0, 12);
+  }
+});
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+      const menuButton = document.getElementById("menuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      if (menuButton && mobileMenu) {
+          menuButton.addEventListener("click", () => {
+              mobileMenu.classList.toggle("hidden");
+          });
+      }
+  });
+</script>
+</body>
+</html>

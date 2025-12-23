@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Editar Socio</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="icon" th:href="@{/Imagen/Logo.png}" />
+    <style>
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        input, select, textarea {
+         background-color: white; color: black ;
+         }
+
+        /* Animación sutil para hover de botón */
+        .btn-primary {
+          transition: all 0.3s ease;
+        }
+
+        input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active
+         { -webkit-box-shadow: 0 0 0px 1000px white inset !important; -webkit-text-fill-color: black !important; }
+
+        input::-ms-reveal, input::-ms-clear { display: none; }
+        /* Safari y otros navegadores basados en WebKit */
+        input[type="password"]::-webkit-textfield-decoration-container
+        { display: none; }
+    </style>
+</head>
+<!--<body class="bg-white font-sans">-->
+<body class="bg-cover bg-center bg-no-repeat min-h-screen flex flex-col text-white"
+      style="background-image: url('/Imagen/Portada.jpg');">
+
+<div id="webcrumbs" class="bg-transparent text-white min-h-screen flex flex-col">
+
+    <div th:replace="Orden/Head :: common-header"></div>
+    <!--<div class="min-h-screen flex flex-col items-center justify-center p-4 bg-white">-->
+    <div class="flex-grow flex items-center justify-center py-10 px-4">
+
+        <div class="bg-white text-gray-800 rounded-2xl shadow-2xl p-6 max-w-lg w-full border-t-4 border-green-700">
+
+            <div class="flex items-center justify-center mb-6">
+                <img src="/Imagen/Logo.png" alt="Logo" class="w-14 h-14 rounded-full border-2 border-green-700 mr-3">
+                <h1 class="text-2xl font-extrabold text-green-700 tracking-tight">Mega Feria de la Católica</h1>
+            </div>
+
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-extrabold text-gray-900 tracking-wide relative inline-block">
+                    Vizualizar datos del socio
+                    <span class="block w-16 h-1 bg-green-700 mx-auto mt-2 rounded-full"></span>
+                </h2>
+
+            </div>
+
+            <form class="p-6 space-y-5" >
+                <div class="space-y-4">
+                    <input type="hidden" name="idsocio" th:value="${socio.idsocio}"/>
+
+                    <div class="relative">
+                        <label class="text-sm text-gray-600 mb-1 block">Número carnet</label>
+                        <input class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"
+                               type="text" name="numero_carnet" th:value="${socio.numero_carnet}" readonly/>
+                        <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined">lock</span>
+                    </div>
+                    <div class="relative">
+                        <label class="text-sm text-gray-600 mb-1 block">Nombre</label>
+                        <input class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"
+                               type="text" name="nombresocio" th:value="${socio.nombresocio}"/>
+                        <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined">account_circle</span>
+                    </div>
+                    <div class="relative">
+                        <label class="text-sm text-gray-600 mb-1 block">Apellido</label>
+                        <input class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"
+                               type="text" name="apellidopaternosocio" th:value="${socio.apellidopaternosocio}"/>
+                        <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined">mail</span>
+                    </div>
+                    <div class="relative">
+                        <label class="text-sm text-gray-600 mb-1 block">direccion</label>
+                        <input class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"
+                               type="text" name="direccion" th:value="${socio.direccion}"/>
+                        <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined">lock</span>
+                    </div>
+                    <div class="relative">
+                        <label class="text-sm text-gray-600 mb-1 block">distrito</label>
+                        <input class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"
+                               type="text" name="distrito" th:value="${socio.distrito}"/>
+                        <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined">lock</span>
+                    </div>
+                    <input type="hidden" name="dni" th:value="${socio.dni}"/>
+
+                    <div class="relative">
+                        <label class="text-sm text-gray-600 mb-1 block">télefono</label>
+                        <input class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"
+                               type="text" name="telefono" th:value="${socio.telefono}"/>
+                        <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined">lock</span>
+                    </div>
+
+                    <input type="hidden" name="correo" th:value="${socio.correo}"/>
+                </div>
+
+
+                <div class="pt-2">
+                    <!--
+                    <a href="/socios/lista"
+                       class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-lg shadow-md transition-colors duration-300">
+                        Regresar
+                    </a>
+                    -->
+                    <button
+                            type="button"
+                            onclick="window.history.back()"
+                            class="w-full bg-green-700 hover:bg-green-700 text-white font-semibold py-3 rounded-lg shadow-md transition-colors duration-300">
+                        Regresar
+                    </button>
+                </div>
+
+
+
+
+            </form>
+        </div>
+        <!--<div class="mt-6 text-center text-white text-sm opacity-80">© 2023 Tu Plataforma. Todos los derechos reservados.</div>-->
+    </div>
+</div>
+<div th:replace="Orden/Footer :: common-footer"></div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const menuButton = document.getElementById("menuBtn");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        if (menuButton && mobileMenu) {
+            menuButton.addEventListener("click", () => {
+                mobileMenu.classList.toggle("hidden");
+            });
+        }
+    });
+</script>
+</body>
+</html>

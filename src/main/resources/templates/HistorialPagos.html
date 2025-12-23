@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!--<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mega Feria de la Católica</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+
+  <!-- Fuente e íconos (NUEVO) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  <link rel="icon" th:href="@{/Imagen/Logo.png}" />
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    input, select, textarea {
+     background-color: white; color: black ;
+     }
+
+    /* Animación sutil para hover de botón */
+    .btn-primary {
+      transition: all 0.3s ease;
+    }
+
+    input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active
+     { -webkit-box-shadow: 0 0 0px 1000px white inset !important; -webkit-text-fill-color: black !important; }
+
+    input::-ms-reveal, input::-ms-clear { display: none; }
+
+    /* Forzar que los inputs NO usen la fuente de Material Icons */
+    input, select, textarea {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    }
+
+    /* Solo los iconos usan esta fuente */
+    .material-symbols-outlined {
+      font-family: "Material Symbols Outlined" !important;
+      font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+    }
+
+  </style>
+</head>
+
+<body class="bg-cover bg-center bg-no-repeat min-h-screen flex flex-col text-white"
+      style="background-image: url('/Imagen/Horario.jpg');">
+<!--header-->
+<div th:replace="Orden/Head :: common-header"></div>
+
+<br>
+
+
+
+
+
+<main class="flex-grow container mx-auto p-6">
+  <div   class="max-w-4xl mx-auto space-y-6">
+
+
+
+
+
+    <br>
+    <section class="bg-white shadow-2xl rounded-2xl p-6 ">
+      <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+        <h2 class="text-3xl font-extrabold text-green-700 tracking-wide">Historial de Pagos</h2>
+
+      </div>
+      <div class="overflow-x-auto rounded-lg border border-gray-300 mt-4">
+        <table class="min-w-full divide-y divide-gray-300 bg-white text black text-base md:text-lg">
+          <thead class="bg-green-700 text-white">
+          <tr>
+            <th class="px-8 py-4 text-left font-semibold uppercase tracking-wider">Fecha</th>
+            <th class="px-8 py-4 text-left font-semibold uppercase tracking-wider">Monto</th>
+            <th class="px-8 py-4 text-left font-semibold uppercase tracking-wider">Registrado por la Secretaria(o)</th>
+
+          </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 bg-white">
+          <tr th:each="pago : ${pagos}" >
+            <td class="px-8 py-5 text-gray-900 font-medium" th:text="${pago.fecha}">150</td>
+            <td class="px-8 py-5 text-gray-900" th:text="${pago.monto}">Pendiente</td>
+            <td class="px-8 py-5 text-gray-900"   th:text="${pago.carnetRegistrador} + ' - ' + ${pago.nombreRegistrador}" >Deuda Fecha</td>
+
+          </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</main>
+
+
+
+<div th:replace="Orden/Footer :: common-footer"></div>
+</body>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+      const menuButton = document.getElementById("menuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      if (menuButton && mobileMenu) {
+          menuButton.addEventListener("click", () => {
+              mobileMenu.classList.toggle("hidden");
+          });
+      }
+  });
+</script>
+</html>

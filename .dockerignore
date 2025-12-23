@@ -1,0 +1,45 @@
+# Carpetas de build y target
+target/
+!target/*.jar
+
+# Carpetas del IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.bak
+*.swp
+*~
+
+# Frontend
+fronted/node_modules/
+fronted/dist/
+fronted/build/
+
+# Maven Wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+# Documentación
+HELP.md
+README.md
+*.md
+
+# Docker
+Dockerfile
+.dockerignore

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Reuniones</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" th:href="@{/css/christi-theme.css}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" th:href="@{/Imagen/Logo.png}" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+</head>
+
+<body class="bg-cover bg-center bg-no-repeat min-h-screen flex flex-col text-white"
+      style="background-image: url('/Imagen/Socios.jpg');">
+
+<div th:replace="Orden/Head :: common-header"></div>
+<br>
+<!-- LISTADO DE SOCIOS -->
+<main class="flex-grow container mx-auto p-6">
+  <section class="bg-white shadow-2xl rounded-2xl p-6 border-2 border-green-700">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+      <h2 class="text-3xl font-extrabold text-green-800 tracking-wide">Listado de Reuniones</h2>
+
+    </div>
+    <div class="overflow-x-auto rounded-lg border border-green-300 mt-4">
+      <table class="min-w-full divide-y divide-green-300 bg-white text black text-base md:text-lg">
+        <thead class="bg-green-700 text-white">
+        <tr>
+          <th class="px-8 py-4 text-left font-semibold uppercase tracking-wider">Tipo de Evento</th>
+          <th class="px-8 py-4 text-left font-semibold uppercase tracking-wider">fecha</th>
+          <th class="px-8 py-4 text-left font-semibold uppercase tracking-wider">Descripción</th>
+
+
+        </tr>
+        </thead>
+
+        <tbody class="divide-y divide-green-200 bg-white"><!--Modificar Egresos-->
+        <tr th:each="listareuniones : ${listareuniones}" >
+          <td class="px-8 py-5 text-gray-900" th:text="${listareuniones.tipoevento}">Persona que registro el Egreso</td>
+
+          <td class="px-8 py-5 text-gray-900"
+              th:text="${#temporals.format(listareuniones.fecha, 'dd/MM/yyyy HH:mm')}">
+
+            <!--
+            th:text="${#temporals.format(listareuniones.fecha, 'dd/MM/yyyy HH:mm')}">-->
+          </td>
+
+          <td class="px-8 py-5 text-gray-900"  th:text="${listareuniones.descripcion}">Descripción</td>
+          <td><!--
+            <a href="../paginas/asistenciasPorReunion"
+               class="mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded inline-block">
+              Tomar Asistencia
+            </a>Method…
+
+            <form  >
+
+              --><!--
+              <input type="hidden" name="idasistencia" th:value="${listareuniones.idasistencia}">
+              <input type="hidden" name="tipoevento" th:value="${listareuniones.tipoevento}">-->
+              <!--<input type="hidden" name="fecha" th:value="${listareuniones.fecha}">-->
+              <!--
+              <input type="hidden" name="fecha"
+                     th:value="${#temporals.format(listareuniones.fecha, 'yyyy-MM-dd' 'T' 'HH:mm:ss')}">
+               --><!--
+              <input type="hidden" name="fecha"
+                     th:value="${#temporals.format(listareuniones.fecha, 'yyyy-MM-dd''T''HH:mm:ss')}">
+
+              <input type="hidden" name="descripcion" th:value="${listareuniones.descripcion}">
+
+
+
+            </form>
+          </td>
+          -->
+        </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+<!--</div>-->
+<br>
+<div th:replace="Orden/Footer :: common-footer" class="mt-auto"></div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+      const menuButton = document.getElementById("menuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      if (menuButton && mobileMenu) {
+          menuButton.addEventListener("click", () => {
+              mobileMenu.classList.toggle("hidden");
+          });
+      }
+  });
+</script>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+      // Obtener los mensajes (pueden venir del model o como flash attributes)
+      let mensajeError = /*[[${error}]]*/ null;
+      let mensajeExito = /*[[${Exito}]]*/ null;
+
+      // Mostrar mensaje de error si existe
+      if (mensajeError !== null && mensajeError !== undefined) {
+          Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: mensajeError,
+              confirmButtonColor: '#dc2626',
+              background: '#fef9ff'
+          });
+      }
+
+      // Mostrar mensaje de éxito si existe
+      if (mensajeExito !== null && mensajeExito !== undefined) {
+          Swal.fire({
+              icon: 'success',
+              title: '¡Éxito!',
+              text: mensajeExito,
+              confirmButtonColor: '#7e22ce',
+              background: '#fef9ff'
+          });
+      }
+  /*]]>*/
+</script>
+</body>
+</html>

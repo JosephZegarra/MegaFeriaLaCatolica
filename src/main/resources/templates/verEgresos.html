@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Movimiento</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" th:href="@{/css/christi-theme.css}">
+  <link rel="icon" th:href="@{/Imagen/Logo.png}" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+</head>
+<!--<body class="bg-[#f0fdf4] font-['Open_Sans'] text-gray-800">-->
+<body class="text-white min-h-screen flex flex-col bg-[#C5E8A9]">
+
+<!--<div th:replace="Orden/Head :: common-header"></div>-->
+<header class="bg-[#C5E8A9] backdrop-blur-md text-black shadow-lg sticky top-0 z-50">
+  <div class="w-full px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+      <img th:src="@{/Imagen/Logo.png}" alt="Logo" class="w-14 h-14 rounded-full border-2 border-green-700" />
+      <h1 class="text-3xl md:text-4xl font-extrabold text-green-800 tracking-tight ">
+        Mega Feria de la Católica
+      </h1>
+    </div>
+
+
+    <nav class="hidden md:flex space-x-8 text-lg font-semibold  text-green-900">
+      <button
+              onclick="window.history.back()"
+              class="hover:text-green-700 transition">
+        Página Anterior
+      </button>
+      <a th:href="@{/paginas/verEgresos}" class="hover:text-green-700 transition">Ver Egresos</a>
+      <a th:href="@{/paginas/registrarmovimiento}" class="hover:text-green-700 transition">Registrar Movimiento </a>
+      <a th:href="@{/paginas/logout}" class="hover:text-green-700 transition">Cerrar Sesión</a>
+    </nav>
+
+    <button id="menuBtn" class="md:hidden text-3xl focus:outline-none hover:text-green-700 transition">
+      ☰
+    </button>
+  </div>
+
+
+  <div id="mobileMenu" class="hidden flex-col space-y-3 bg-[#111827] border-t border-green-900 text-center py-4 md:hidden">
+    <a th:href="@{/paginas/verEgresos}" class="block py-2 hover:text-green-700 transition">Ver Egresos</a>
+    <a th:href="@{/paginas/registrarmovimiento}" class="block py-2 hover:text-green-700 transition">Registrar Movimiento </a>
+    <a  th:href="@{/paginas/logout}" class="block py-2 hover:text-green-700 transition">Cerrar Sesión</a>
+    <a href="#perfil" class="block py-2 hover:text-green-700 transition">Mi Perfil</a>
+  </div>
+
+
+</header>
+<br>
+<!-- LISTADO DE SOCIOS -->
+<main class="flex-grow container mx-auto p-6">
+  <section class="bg-white shadow-2xl rounded-2xl p-6 border-2 border-green-700">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+      <h2 class="text-3xl font-extrabold text-green-700 tracking-wide">Listado de Egresos</h2>
+
+    </div>
+    <div class="overflow-x-auto rounded-lg border border-green-300 mt-4">
+      <table class="min-w-full divide-y divide-green-300 bg-white text black text-base md:text-lg">
+        <thead class="bg-green-700 text-white">
+        <tr>
+          <th class="px-8 py-4 text-left font-semibold uppercase tracking-wider">Socio que registro</th>
+          <th class="px-8 py-4 text-left font-semibold uppercase tracking-wider">Tipo</th>
+          <th class="px-8 py-4 text-left font-semibold uppercase tracking-wider">Descripción</th>
+          <th class="px-8 py-4 text-left font-semibold uppercase tracking-wider">Monto</th>
+          <th class="px-8 py-4 text-left font-semibold uppercase tracking-wider">Fecha</th>
+        </tr>
+        </thead>
+        <tbody class="divide-y divide-green-200 bg-white"><!--Modificar Egresos-->
+        <tr th:each="movimientos : ${movimientos}" >
+          <td class="px-8 py-5 text-gray-900" th:text="${movimientos.nombreSocio+' '+movimientos.apellidoPaternoSocio}">Persona que registro el Egreso</td>
+          <td class="px-8 py-5 text-gray-900"  th:text="${movimientos.tipo}">Tipo</td>
+          <td class="px-8 py-5 text-gray-900"  th:text="${movimientos.descripcion}">Descripción</td>
+          <td class="px-8 py-5 text-gray-900"  th:text="${movimientos.monto}">monto</td>
+          <td class="px-8 py-5 text-gray-900" th:text="${movimientos.fecha}">Fecha</td><!--Modificar persona que registra el ingreso-->
+
+
+        </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+<!--</div>-->
+<br>
+<div th:replace="Orden/Footer :: common-footer" class="mt-auto"></div>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+      const menuButton = document.getElementById("menuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      if (menuButton && mobileMenu) {
+          menuButton.addEventListener("click", () => {
+              mobileMenu.classList.toggle("hidden");
+          });
+      }
+  });
+</script>
+</body>
+</html>

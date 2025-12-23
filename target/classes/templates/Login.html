@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<!--<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<!--<head th:replace="Orden/Head :: common-head"></head>-->
+<!--<head th:replace="Orden/Head :: common-head">-->
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login - Mega Feria de la Católica</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fuente e íconos (NUEVO) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  <link rel="icon" th:href="@{/Imagen/Logo.png}" />
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    input, select, textarea {
+     background-color: white; color: black ;
+     }
+
+    /* Animación sutil para hover de botón */
+    .btn-primary {
+      transition: all 0.3s ease;
+    }
+
+    input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active
+     { -webkit-box-shadow: 0 0 0px 1000px white inset !important; -webkit-text-fill-color: black !important; }
+
+    input::-ms-reveal, input::-ms-clear { display: none; }
+
+    /* Forzar que los inputs NO usen la fuente de Material Icons */
+    input, select, textarea {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    }
+
+    /* Solo los iconos usan esta fuente */
+    .material-symbols-outlined {
+      font-family: "Material Symbols Outlined" !important;
+      font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+    }
+
+  </style>
+</head>
+
+<body  class="bg-cover bg-center bg-no-repeat min-h-screen flex flex-col text-white"
+       style="background-image: url('/Imagen/Portada.jpg');">
+ <!--header-->
+  <div th:replace="Orden/Head :: common-header"></div>
+  <!--FORMULARIO -->
+<br>
+
+  <div class="flex items-center justify-center mb-6 flex-1">
+    <div class="bg-white text-gray-800 rounded-2xl shadow-2xl p-10 max-w-md w-full border-t-4 border-green-700">
+
+      <div class="flex items-center justify-center mb-6">
+        <!--<img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1a6bea3f-2fde-4d94-9f01-c65562ce3a5d.png" alt="Logo Mega Feria de la Católica" class="w-14 h-14 mr-4 rounded-full" />-->
+        <img src="/Imagen/Logo.png" alt="Logo" class="w-14 h-14 rounded-full border-2 border-green-700 mr-3">
+        <h1 class="text-2xl font-bold text-green-700 tracking-tight">Mega Feria de la Católica</h1>
+      </div>
+
+      <div class="text-center mb-6">
+        <h2 class="text-xl font-bold text-gray-900">
+          Iniciar Sesión
+        </h2>
+
+      </div>
+
+
+      <form th:action="@{/socios/buscarsocio}" method="post" class="space-y-5">
+        <div class="relative">
+          <label for="numero_carnet" class="text-sm text-gray-700 font-semibold mb-1 block">Número de Carnet</label>
+          <input
+                  type="text"
+                  id="numero_carnet"
+                  name="numero_carnet"
+                  required
+                  placeholder="Número de Carnet"
+                  class="w-full px-4 py-3 rounded-lg border border border-green-700 focus:ring-2 focus:ring-green-700"
+          />
+         <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined">lock</span>
+        </div>
+
+        <div class="relative">
+          <label class="text-sm text-gray-700 font-semibold mb-1 block">Contraseña</label>
+          <input id="contrasena"
+                 class="w-full px-4 py-3 rounded-lg border border-green-700 focus:ring-2 focus:ring-green-700"
+                 type="password"
+                 name="contrasena"
+                 required/>
+
+
+          <span id="togglePassword"
+                class="absolute right-4 top-1/2  text-gray-700 cursor-pointer material-symbols-outlined select-none">
+                visibility_off
+          </span>
+        </div>
+
+        <div class="relative">
+          <label for="rol" class="text-sm text-gray-600 mb-1 block">Selecciona tu Rol</label>
+          <select
+                  id="rol"
+                  name="rol"
+                  required
+                  class="w-full px-4 py-3 rounded-lg border border-green-700 focus:ring-2 focus:ring-green-700 "
+          >
+            <option value="" disabled selected>-- Selecciona un rol --</option>
+            <option value="Presidente">Presidente</option>
+            <option value="Tesorera">Tesorera</option>
+            <option value="Secretaria">Secretaria</option>
+            <option value="Dirigente">Dirigente</option>
+            <option value="Delegadoporrubro">Delegado por rubro</option>
+            <option value="Vocal">Vocal</option>
+            <option value="Socio">Socio</option>
+
+          </select>
+          <span class="absolute right-3 top-9 text-gray-400 material-symbols-outlined">arrow_drop_down</span>
+        </div>
+        <button
+                type="submit"
+                class="w-full bg-green-700 hover:bg-green-700 text-white font-semibold py-3 rounded-lg shadow-md transition-all"
+        >
+          Entrar
+        </button>
+      </form>
+
+
+
+    </div>
+
+  </div>
+
+
+ <br>
+  <div th:replace="Orden/Footer :: common-footer"></div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordInput = document.getElementById('contrasena');
+
+  togglePassword.addEventListener('click', () => {
+    const isPassword = passwordInput.type === 'password';
+    passwordInput.type = isPassword ? 'text' : 'password';
+    togglePassword.textContent = isPassword ? 'visibility' : 'visibility_off';
+  });
+
+
+</script>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+      // Obtener los mensajes (pueden venir del model o como flash attributes)
+      let mensajeError = /*[[${error}]]*/ null;
+      let mensajeExito = /*[[${Exito}]]*/ null;
+
+      // Mostrar mensaje de error si existe
+      if (mensajeError !== null && mensajeError !== undefined) {
+          Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: mensajeError,
+              confirmButtonColor: '#dc2626',
+              background: '#fef9ff'
+          });
+      }
+
+      // Mostrar mensaje de éxito si existe
+      if (mensajeExito !== null && mensajeExito !== undefined) {
+          Swal.fire({
+              icon: 'success',
+              title: '¡Éxito!',
+              text: mensajeExito,
+              confirmButtonColor: '#7e22ce',
+              background: '#fef9ff'
+          });
+      }
+  /*]]>*/
+</script>
+ <script>
+   document.addEventListener("DOMContentLoaded", () => {
+       const menuButton = document.getElementById("menuBtn");
+       const mobileMenu = document.getElementById("mobileMenu");
+
+       if (menuButton && mobileMenu) {
+           menuButton.addEventListener("click", () => {
+               mobileMenu.classList.toggle("hidden");
+           });
+       }
+   });
+ </script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,289 @@
+/**
+ * Christi Theme - Paleta de Colores
+ * Mega Feria de la Católica
+ *
+ * Esta paleta está inspirada en el color verde "christi" y proporciona
+ * un esquema de colores consistente para toda la aplicación.
+ */
+
+/* ===== PALETA DE COLORES CHRISTI ===== */
+:root {
+    /* Colores Christi - Verde Natural */
+    --christi-50: #f5fce9;   /* Verde muy claro - fondos */
+    --christi-100: #eaf8cf;  /* Verde claro - fondos secundarios */
+    --christi-200: #d4f1a5;  /* Verde suave - borders, acentos ligeros */
+    --christi-300: #b7e670;  /* Verde medio claro - acentos */
+    --christi-400: #9ad744;  /* Verde medio - botones secundarios */
+    --christi-500: #6fa922;  /* Verde - estados hover */
+    --christi-600: #5f961a;  /* Verde principal - botones primarios, marca */
+    --christi-700: #497318;  /* Verde oscuro - textos principales, títulos */
+    --christi-800: #3c5b19;  /* Verde más oscuro - textos destacados */
+    --christi-900: #344e19;  /* Verde muy oscuro - texto principal */
+    --christi-950: #192a09;  /* Verde casi negro - textos muy oscuros */
+}
+
+/* ===== ESTILOS BASE ===== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom right, var(--christi-50), var(--christi-100));
+    color: var(--christi-900);
+    min-height: 100vh;
+}
+
+/* ===== BOTONES ===== */
+.btn-christi-primary {
+    background-color: var(--christi-600);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-christi-primary:hover {
+    background-color: var(--christi-700);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(95, 150, 26, 0.3);
+}
+
+.btn-christi-secondary {
+    background-color: var(--christi-400);
+    color: var(--christi-950);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-christi-secondary:hover {
+    background-color: var(--christi-600);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-christi-outline {
+    background-color: transparent;
+    color: var(--christi-600);
+    border: 2px solid var(--christi-600);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-christi-outline:hover {
+    background-color: var(--christi-600);
+    color: white;
+}
+
+/* ===== INPUTS Y FORMULARIOS ===== */
+.input-christi {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    background-color: white;
+    color: black;
+    transition: all 0.3s ease;
+}
+
+.input-christi:focus {
+    outline: none;
+    border-color: var(--christi-600);
+    box-shadow: 0 0 0 3px rgba(95, 150, 26, 0.1);
+}
+
+.select-christi {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    background-color: white;
+    color: black;
+    transition: all 0.3s ease;
+}
+
+.select-christi:focus {
+    outline: none;
+    border-color: var(--christi-600);
+    box-shadow: 0 0 0 3px rgba(95, 150, 26, 0.1);
+}
+
+/* ===== TARJETAS (CARDS) ===== */
+.card-christi {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.card-christi:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px);
+}
+
+.card-christi-bordered {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    border-left: 4px solid var(--christi-600);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== BADGES Y ETIQUETAS ===== */
+.badge-christi-success {
+    background-color: var(--christi-600);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.badge-christi-warning {
+    background-color: var(--christi-400);
+    color: var(--christi-950);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.badge-christi-info {
+    background-color: var(--christi-200);
+    color: var(--christi-900);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* ===== TABLAS ===== */
+.table-christi {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.table-christi thead {
+    background-color: var(--christi-600);
+    color: white;
+}
+
+.table-christi th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.table-christi td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--christi-100);
+}
+
+.table-christi tbody tr:hover {
+    background-color: var(--christi-50);
+}
+
+/* ===== TÍTULOS ===== */
+.title-christi {
+    color: var(--christi-700);
+    font-weight: bold;
+}
+
+.title-christi-shadow {
+    color: var(--christi-700);
+    font-weight: bold;
+    text-shadow: 0 0 15px rgba(95, 150, 26, 0.3);
+}
+
+/* ===== BORDES Y SEPARADORES ===== */
+.border-christi {
+    border-color: var(--christi-600);
+}
+
+.border-christi-light {
+    border-color: var(--christi-200);
+}
+
+/* ===== FONDOS ===== */
+.bg-christi-gradient {
+    background: linear-gradient(to bottom right, var(--christi-50), var(--christi-100));
+}
+
+.bg-christi-gradient-dark {
+    background: linear-gradient(135deg, var(--christi-50), var(--christi-100));
+}
+
+.bg-christi-primary {
+    background-color: var(--christi-600);
+    color: white;
+}
+
+.bg-christi-light {
+    background-color: var(--christi-50);
+}
+
+/* ===== ENLACES ===== */
+.link-christi {
+    color: var(--christi-600);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.link-christi:hover {
+    color: var(--christi-700);
+    text-decoration: underline;
+}
+
+/* ===== ANIMACIONES ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+/* ===== UTILIDADES ===== */
+.text-christi-50 { color: var(--christi-50); }
+.text-christi-100 { color: var(--christi-100); }
+.text-christi-200 { color: var(--christi-200); }
+.text-christi-300 { color: var(--christi-300); }
+.text-christi-400 { color: var(--christi-400); }
+.text-christi-500 { color: var(--christi-500); }
+.text-christi-600 { color: var(--christi-600); }
+.text-christi-700 { color: var(--christi-700); }
+.text-christi-800 { color: var(--christi-800); }
+.text-christi-900 { color: var(--christi-900); }
+.text-christi-950 { color: var(--christi-950); }
+
+/* Inputs y selects con autofill */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    -webkit-text-fill-color: black !important;
+}
+
+/* Ocultar reveladores de password en IE/Edge */
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}

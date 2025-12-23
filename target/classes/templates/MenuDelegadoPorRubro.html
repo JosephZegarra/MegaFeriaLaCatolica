@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Mega Feria de la Católica </title>
+    <!-- <link rel="stylesheet" href="css/indexcss.css">-->
+    <link rel="stylesheet" th:href="@{/css/indexcss.css}">
+    <link rel="stylesheet" th:href="@{/css/christi-theme.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Boxicons CDN link-->
+    <link rel="icon" th:href="@{/Imagen/Logo.png}" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="text-white min-h-screen flex flex-col">
+
+<div th:replace="Orden/Head :: common-header"></div>
+
+
+<section id="dashboard" class="flex-1 py-16 px-6 fade-in">
+    <div class="container mx-auto">
+        <h3 class="text-3xl font-bold text-center text-gray-800 mb-12">Funcionalidades Principales</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Card 1: Padrón -->
+            <div class="card bg-white p-6 rounded-lg shadow-md text-center">
+
+                <img th:src="@{/Imagen/ListaAsistencia.jpg}" alt="GestionRol"  class="w-full h-36 object-cover rounded-md mb-4">
+                <h4 class="text-xl font-semibold text-gray-800 mb-2">Gestión de Asistencia</h4>
+                <p class="text-gray-600">Registro de Asistencia para mejorar la gestión de la asociación.</p>
+                <!--<button class="mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Ver Padrón</button>
+                 -->
+                <a href="../paginas/asistencias"
+                   class="btn btn-christi-primary mt-5 px-5 py-2 inline-block bg-christi-600 text-white hover:bg-christi-700">
+                    Tomar Asistencia
+                </a>
+            </div>
+
+
+            <!-- Card 2: Deudas -->
+
+            <div class="card bg-white p-6 rounded-lg shadow-md text-center">
+                <img th:src="@{/Imagen/CalculoDeudas.png}" alt="GestionRol"  class="w-full h-36 object-cover rounded-md mb-4">
+                <h4 class="text-xl font-semibold text-gray-800 mb-2">Visualización de Deuda</h4>
+                <p class="text-gray-600">Revisa tu estado de cuenta Actual</p>
+                <br>
+                <!--<button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Deudas</button>-->
+                <a href="../paginas/verDeudas"
+                   class="btn btn-christi-primary mt-5 px-5 py-2 inline-block bg-christi-600 text-white hover:bg-christi-700">
+                   Consultar Deudas
+                </a>
+            </div>
+
+
+            <div class="card bg-white p-6 rounded-lg shadow-md text-center">
+                <img th:src="@{/Imagen/Comunicaciones.png}" alt="GestionRol"  class="w-full h-36 object-cover rounded-md mb-4">
+                <h4 class="text-xl font-semibold text-gray-800 mb-2">Comunicaciones</h4>
+                <p class="text-gray-600">Recibe notificaciones sobre reuniones, actividades en la asociación.</p>
+                <!--<button class="mt-4 bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded">Ver Comunicados</button>-->
+                <a href="../reunion/verListaReuniones"
+                   class="btn btn-christi-primary mt-5 px-5 py-2 inline-block bg-christi-600 text-white hover:bg-christi-700">
+
+                   Lista Reuniones
+                </a>
+            </div>
+
+            <div class="card bg-white p-6 rounded-lg shadow-md text-center">
+                <img th:src="@{/Imagen/HistorialPagos.jpg}" alt="GestionRol"  class="w-full h-36 object-cover rounded-md mb-4">
+                <h4 class="text-xl font-semibold text-gray-800 mb-2">Historial de Pagos</h4>
+                <p class="text-gray-600">Consulta tu historial de pagos en cualquier momento.</p>
+                <a href="../paginas/verHistorialPagos"
+                   class="btn btn-christi-primary mt-5 px-5 py-2 inline-block bg-christi-600 text-white hover:bg-christi-700">
+                   Consultar Historial Pagos
+                </a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!--</div>-->
+
+<!--<div th:replace="Orden/Footer :: common-footer" class="mt-auto"></div>-->
+<div class="mt-auto">
+    <div th:replace="Orden/Footer :: common-footer"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const menuButton = document.getElementById("menuBtn");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        if (menuButton && mobileMenu) {
+            menuButton.addEventListener("click", () => {
+                mobileMenu.classList.toggle("hidden");
+            });
+        }
+    });
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+        // Obtener los mensajes (pueden venir del model o como flash attributes)
+        let mensajeError = /*[[${error}]]*/ null;
+        let mensajeExito = /*[[${Exito}]]*/ null;
+
+        // Mostrar mensaje de error si existe
+        if (mensajeError !== null && mensajeError !== undefined) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: mensajeError,
+                confirmButtonColor: '#dc2626',
+                background: '#fef9ff'
+            });
+        }
+
+        // Mostrar mensaje de éxito si existe
+        if (mensajeExito !== null && mensajeExito !== undefined) {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: mensajeExito,
+                confirmButtonColor: '#16a34a',
+                background: '#fef9ff'
+            });
+        }
+    /*]]>*/
+</script>
+</body>
+</html>

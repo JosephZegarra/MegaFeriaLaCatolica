@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html  lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login - Mega Feria de la Católica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" th:href="@{/css/christi-theme.css}">
+    <link rel="icon" th:href="@{/Imagen/Logo.png}" />
+
+    <style>
+
+        .input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(252, 211, 77, 0.5); /* Amarillo dorado */
+            border-color: #fbbf24;
+        }
+        .btn-primary:hover {
+            background-color: #f59e0b; /* Amarillo más oscuro */
+        }
+         select:disabled {
+            background-color: #f3f4f6 !important; /* gris claro */
+            color: #9ca3af !important; /* texto gris */
+            cursor: not-allowed;
+         }
+    </style>
+</head>
+<body class="text-white min-h-screen flex flex-col">
+<div th:replace="Orden/Head :: common-header"></div>
+
+<div class="min-h-screen p-6 md:p-8">
+    <section class="bg-white shadow-md rounded-lg p-4">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold mb-2 md:mb-0">Listado de Socios</h2>
+
+
+        </div>
+
+        <form th:action="@{/asistencias/guardar}" method="post">
+            <input type="hidden" name="idAsistencia" th:value="${idAsistencia}" />
+            <div class="overflow-x-auto  rounded-lg border border-green-300 mt-4">
+                <table class="min-w-full divide-y divide-green-300 bg-white text-base md:text-lg">
+                    <thead class="bg-green-700 text-white">
+                    <tr>
+                        <th class="px-8 py-4 text-left font-semibold uppercase tracking-wider">Nombre</th>
+                        <th class="px-8 py-4 text-left font-semibold uppercase tracking-wider">Apellido Paterno</th>
+                       <!-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Direccion</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono</th>-->
+                        <th class="px-8 py-4 text-left font-semibold uppercase tracking-wider">Marcar Asistencia</th>
+                        <th class="px-8 py-4 text-left font-semibold uppercase tracking-wider">Puntualidad</th>
+                        <th class="px-8 py-4 text-left font-semibold uppercase tracking-wider">Motivo</th>
+
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-green-200 bg-white">
+                    <tr th:each="socio : ${socios}" class="hover:bg-green-50 transition-colors">
+                        <input type="hidden" name="idsSocios[]" th:value="${socio.idsocio}" />
+                        <td class="px-8 py-5 text-gray-900 font-medium" th:text="${socio.nombresocio}">Nombre</td>
+                        <td class="px-8 py-5 text-gray-900" th:text="${socio.apellidopaternosocio}">Apellido Paterno</td>
+
+                        <td class="px-8 py-5">
+                            <select name="estados[]" class="estado border border-green-700 rounded-lg px-3 py-2 text-gray-900 w-full">
+                                <option value="" selected hidden></option>
+                                <option value="Presente">Presente</option>
+                                <option value="Ausente">Ausente</option>
+                                <option value="Justificado">Justificado</option>
+                            </select>
+                        </td>
+
+                        <td class="px-8 py-5">
+                            <select name="puntualidades[]" class="puntualidad border border-green-700 rounded-lg px-3 py-2 text-gray-900 w-full">
+                                <option value="" selected hidden></option>
+                                <option value="Temprano">Temprano</option>
+                                <option value="Tardanza">Tardanza</option>
+                            </select>
+                        </td>
+                        <td class="px-8 py-5">
+                            <select name="motivos[]" class="motivo border border-green-700 rounded-lg px-3 py-2 text-gray-900 w-full">
+                                <option value="" selected hidden></option>
+                                <option value="Viaje">Viaje</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-6 text-right">
+                <button type="submit"
+                        class="bg-green-700 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-md shadow-md transition">
+                    Guardar Asistencia
+                </button>
+            </div>
+        </form>
+    </section>
+
+
+
+
+</div>
+<div th:replace="Orden/Footer :: common-footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        const filas = document.querySelectorAll("tbody tr");
+
+        filas.forEach(fila => {
+            const selectEstado = fila.querySelector(".estado");
+            const selectMotivo = fila.querySelector(".motivo");
+            const selectPuntualidad = fila.querySelector(".puntualidad");
+
+            function actualizarCampos() {
+                if (selectEstado.value === "Presente") {
+                    // Deshabilitar motivo
+                    selectMotivo.value = "";
+                    selectMotivo.style.pointerEvents = "none";
+                    selectMotivo.style.backgroundColor = "#f3f4f6";
+                    selectMotivo.required = false;
+
+                    // Habilitar puntualidad
+                    selectPuntualidad.style.pointerEvents = "auto";
+                    selectPuntualidad.style.backgroundColor = "";
+                    selectPuntualidad.required = true;
+                }
+                else if (selectEstado.value === "Ausente") {
+                    // Deshabilitar motivo y puntualidad
+                    selectMotivo.value = "";
+                    selectMotivo.style.pointerEvents = "none";
+                    selectMotivo.style.backgroundColor = "#f3f4f6";
+                    selectMotivo.required = false;
+
+                    selectPuntualidad.value = "";
+                    selectPuntualidad.style.pointerEvents = "none";
+                    selectPuntualidad.style.backgroundColor = "#f3f4f6";
+                    selectPuntualidad.required = false;
+                }
+                else if (selectEstado.value === "Justificado") {
+                    // Habilitar motivo y hacerlo obligatorio
+                    selectMotivo.style.pointerEvents = "auto";
+                    selectMotivo.style.backgroundColor = "";
+                    selectMotivo.required = true;
+
+                    // Deshabilitar puntualidad
+                    selectPuntualidad.value = "";
+                    selectPuntualidad.style.pointerEvents = "none";
+                    selectPuntualidad.style.backgroundColor = "#f3f4f6";
+                    selectPuntualidad.required = false;
+                }
+            }
+
+            selectEstado.addEventListener("change", actualizarCampos);
+            actualizarCampos();
+        });
+
+        // Validación antes de enviar
+        form.addEventListener("submit", function (e) {
+            let valido = true;
+
+            filas.forEach(fila => {
+                const selectEstado = fila.querySelector(".estado");
+                const selectMotivo = fila.querySelector(".motivo");
+
+                // Si el estado está vacío
+                if (!selectEstado.value) {
+                    valido = false;
+                    selectEstado.classList.add("border-red-500");
+                } else {
+                    selectEstado.classList.remove("border-red-500");
+                }
+
+                // Si el estado es Justificado y no se eligió motivo
+                if (selectEstado.value === "Justificado" && !selectMotivo.value) {
+                    valido = false;
+                    selectMotivo.classList.add("border-red-500");
+                } else {
+                    selectMotivo.classList.remove("border-red-500");
+                }
+            });
+
+            if (!valido) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Faltan campos obligatorios',
+                    text: 'Debes registrar la asistencia (Presente, Ausente o Justificado) para todos los socios antes de guardar.',
+                    confirmButtonColor: '#dc2626',
+                    background: '#fef9ff'
+                });
+            }
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const menuButton = document.getElementById("menuBtn");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        if (menuButton && mobileMenu) {
+            menuButton.addEventListener("click", () => {
+                mobileMenu.classList.toggle("hidden");
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
