@@ -52,8 +52,44 @@
     </div>
     -->
 
+
     <div class="bg-white p-6 rounded-lg shadow mb-6">
-        <h3 class="text-lg font-semibold">Ingresos / Egresos (Últimos 7 días)</h3>
+        <h3 class="text-lg font-semibold mb-4">Ingresos / Egresos (Últimos 7 días)</h3>
+        
+        <!-- Controles de exportación -->
+        <div class="mb-4 flex gap-4 items-end">
+            <div>
+                <label for="mesMovimientos" class="block text-sm font-medium text-gray-700 mb-1">Mes</label>
+                <select id="mesMovimientos" class="border border-gray-300 rounded px-3 py-2">
+                    <option value="">Seleccionar mes</option>
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="anioMovimientos" class="block text-sm font-medium text-gray-700 mb-1">Año</label>
+                <select id="anioMovimientos" class="border border-gray-300 rounded px-3 py-2">
+                    <option value="">Seleccionar año</option>
+                </select>
+            </div>
+            
+            <button onclick="exportarMovimientos()" 
+                    class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded transition duration-200">
+                📥 Exportar a Excel
+            </button>
+        </div>
+        
         <table class="w-full text-left border-collapse">
             <thead>
             <tr class="border-b bg-green-200">
@@ -80,7 +116,41 @@
 
     <!-- ---------- RESUMEN ASISTENCIA DIARIA ---------- -->
     <div class="bg-white p-6 rounded-lg shadow mb-6">
-        <h3 class="text-lg font-semibold">Asistencia Diaria (últimos 7 días)</h3>
+        <h3 class="text-lg font-semibold mb-4">Asistencia Diaria (últimos 7 días)</h3>
+
+        <!-- Controles de exportación -->
+        <div class="mb-4 flex gap-4 items-end">
+            <div>
+                <label for="mesAsistencias" class="block text-sm font-medium text-gray-700 mb-1">Mes</label>
+                <select id="mesAsistencias" class="border border-gray-300 rounded px-3 py-2">
+                    <option value="">Seleccionar mes</option>
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="anioAsistencias" class="block text-sm font-medium text-gray-700 mb-1">Año</label>
+                <select id="anioAsistencias" class="border border-gray-300 rounded px-3 py-2">
+                    <option value="">Seleccionar año</option>
+                </select>
+            </div>
+            
+            <button onclick="exportarAsistencias()" 
+                    class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded transition duration-200">
+                📥 Exportar a Excel
+            </button>
+        </div>
 
         <table class="w-full text-left border-collapse">
             <thead>
@@ -144,20 +214,6 @@
     let estadoValues = estado.map(item => Number(item[1]));
 
     new Chart(document.getElementById('chartEstado'), {
-        type: 'bar',
-        data: {
-            labels: estadoLabels,
-            datasets: [{
-                label: 'Cantidad',
-                data: estadoValues,
-                backgroundColor: ['#4CAF50','#FFC107','#F44336']
-            }]
-        }
-    });
-
-</script>
-<script>
-    new Chart(document.getElementById('chartEstado'), {
     type: 'bar',
     data: {
         labels: estadoLabels,
@@ -177,6 +233,82 @@
         }
     }
 });
+
+// ================================
+// FUNCIONES DE EXPORTACIÓN
+// ================================
+
+// Poblar selectores de año al cargar la página
+window.addEventListener('DOMContentLoaded', function() {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    
+    // Generar años desde 4 años atrás hasta el próximo año
+    for (let year = currentYear - 4; year <= currentYear + 1; year++) {
+        years.push(year);
+    }
+    
+    // Poblar selector de años para movimientos
+    const selectAnioMovimientos = document.getElementById('anioMovimientos');
+    years.forEach(year => {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        if (year === currentYear) {
+            option.selected = true;
+        }
+        selectAnioMovimientos.appendChild(option);
+    });
+    
+    // Poblar selector de años para asistencias
+    const selectAnioAsistencias = document.getElementById('anioAsistencias');
+    years.forEach(year => {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        if (year === currentYear) {
+            option.selected = true;
+        }
+        selectAnioAsistencias.appendChild(option);
+    });
+    
+    // Pre-seleccionar el mes actual
+    const currentMonth = new Date().getMonth() + 1; // getMonth() devuelve 0-11
+    document.getElementById('mesMovimientos').value = currentMonth;
+    document.getElementById('mesAsistencias').value = currentMonth;
+});
+
+/**
+ * Exportar movimientos (Ingresos/Egresos) a Excel
+ */
+function exportarMovimientos() {
+    const mes = document.getElementById('mesMovimientos').value;
+    const anio = document.getElementById('anioMovimientos').value;
+    
+    if (!mes || !anio) {
+        alert('Por favor seleccione el mes y el año antes de exportar.');
+        return;
+    }
+    
+    // Redirigir al endpoint de exportación
+    window.location.href = `/Dashboard/exportar-movimientos?mes=${mes}&anio=${anio}`;
+}
+
+/**
+ * Exportar asistencias a Excel
+ */
+function exportarAsistencias() {
+    const mes = document.getElementById('mesAsistencias').value;
+    const anio = document.getElementById('anioAsistencias').value;
+    
+    if (!mes || !anio) {
+        alert('Por favor seleccione el mes y el año antes de exportar.');
+        return;
+    }
+    
+    // Redirigir al endpoint de exportación
+    window.location.href = `/Dashboard/exportar-asistencias?mes=${mes}&anio=${anio}`;
+}
 
 </script>
 </body>
