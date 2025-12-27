@@ -46,8 +46,6 @@ public class PaginasController {
     @Autowired
     private DashboardService dashboardService;
 
-
-
     @GetMapping("/infoUsuario")
     public String infoUsuario(HttpSession session, Model model) {
         SocioDTO socio = (SocioDTO) session.getAttribute("socioLogeado");
@@ -60,12 +58,12 @@ public class PaginasController {
     }
 
     /*
-    @GetMapping("/verListaReunion")
-    public String verListaReunion(Model model)
-    {
-
-    }
-    */
+     * @GetMapping("/verListaReunion")
+     * public String verListaReunion(Model model)
+     * {
+     * 
+     * }
+     */
 
     @GetMapping("/Login")
     public String Login() {
@@ -74,48 +72,45 @@ public class PaginasController {
 
     @GetMapping("/verHistorialPagos")
     public String verHistorialPagos(HttpSession session, Model model) {
-        SocioDTO socio = (SocioDTO) session.getAttribute("socioLogeado");
-        List<PagosDTO> pagos = pagosService.obtenerPagosPorSocio(socio.getIdsocio());
+        // Obtener TODOS los pagos globales en lugar de solo los del socio logeado
+        List<PagosDTO> pagos = pagosService.obtenerTodosLosPagos();
         model.addAttribute("pagos", pagos);
 
-        //model.addAttribute("socio", socio);
         return "HistorialPagos";
     }
 
     @GetMapping("/verDeudas")
     public String verDeudas(HttpSession session, Model model) {
-        //extraigo datos del socio
+        // extraigo datos del socio
         SocioDTO socio = (SocioDTO) session.getAttribute("socioLogeado");
-        //Verificando si extraigo los datos del socio
+        // Verificando si extraigo los datos del socio
         if (socio == null) {
             model.addAttribute("error", "La sesión ha expirado. Inicie sesión de nuevo.");
             return "Login";
         }
 
-        //redireccionando al metodo para saber su deuda
+        // redireccionando al metodo para saber su deuda
         return "redirect:/deudas/deudasocio?numero_carnet=" + socio.getNumero_carnet();
 
     }
 
     /*
-    @GetMapping("/verListaReuniones")
-    public String verListaReuniones()
-    {
-
-    }
-    */
-
+     * @GetMapping("/verListaReuniones")
+     * public String verListaReuniones()
+     * {
+     * 
+     * }
+     */
 
     @GetMapping("/registrarmovimiento")
     public String registrarmovimiento() {
         return "RegistroMovimiento";
     }
 
-
     @GetMapping("/verEgresos")
     public String verEgresos(Model model) {
-        //List<MovimientoDTO>movimientos=movimientoService.listarEgresos();
-        //model.addAttribute("movimientos",movimientos);
+        // List<MovimientoDTO>movimientos=movimientoService.listarEgresos();
+        // model.addAttribute("movimientos",movimientos);
         return "redirect:/movimiento/ListaEgresos";
     }
 
@@ -131,170 +126,151 @@ public class PaginasController {
 
     @GetMapping("/asistencias")
     public String asistencia(Model model) {
-        List<SocioDTO> socios = socioService.listar();//Le envio la lista de socios
+        List<SocioDTO> socios = socioService.listar();// Le envio la lista de socios
         model.addAttribute("socios", socios);
-        //CREO una asistencia
-        //AsistenciaDTO nuevaasistencia = new AsistenciaDTO();
-        //nuevaasistencia.setFecha(LocalDateTime.now());
-        //nuevaasistencia.setTipoevento("Asistencia");
-        //nuevaasistencia.setDescripcion("Asistencia a los socios todos los días");
-        //AsistenciaDTO asistenciaGuardada = asistenciaService.guardarasistenciatabla(nuevaasistencia);
-        //Integer idAsistencia=nuevaasistencia.getIdasistencia();
-        //model.addAttribute("idAsistencia",idAsistencia);
-        //model.addAttribute("idAsistencia", asistenciaGuardada.getIdasistencia());
+        // CREO una asistencia
+        // AsistenciaDTO nuevaasistencia = new AsistenciaDTO();
+        // nuevaasistencia.setFecha(LocalDateTime.now());
+        // nuevaasistencia.setTipoevento("Asistencia");
+        // nuevaasistencia.setDescripcion("Asistencia a los socios todos los días");
+        // AsistenciaDTO asistenciaGuardada =
+        // asistenciaService.guardarasistenciatabla(nuevaasistencia);
+        // Integer idAsistencia=nuevaasistencia.getIdasistencia();
+        // model.addAttribute("idAsistencia",idAsistencia);
+        // model.addAttribute("idAsistencia", asistenciaGuardada.getIdasistencia());
         return "ModuloAsistencia";
 
     }
 
-
-
-
-
-
-
     @GetMapping("/crearReunion")
-    public String crearReunion(Model model)
-    {
-       return "CrearReunion";
+    public String crearReunion(Model model) {
+        return "CrearReunion";
     }
 
     @GetMapping("/realizarpago")
     public String realizarpago(@RequestParam Integer idsocio,
-                               @RequestParam(required = false) BigDecimal totalDeuda,
-                               @RequestParam(required = false) String numero_carnet, Model model)
-    {
-        SocioDTO socioDTO=socioService.BuscarPorId(idsocio);
+            @RequestParam(required = false) BigDecimal totalDeuda,
+            @RequestParam(required = false) String numero_carnet, Model model) {
+        SocioDTO socioDTO = socioService.BuscarPorId(idsocio);
 
-        //Si no llega la deuda por parametro , la obtendremos del servicio
-        if(totalDeuda==null)
-        {
-             totalDeuda=deudaService.obtenerdeudaporsocio(socioDTO.getIdsocio());
+        // Si no llega la deuda por parametro , la obtendremos del servicio
+        if (totalDeuda == null) {
+            totalDeuda = deudaService.obtenerdeudaporsocio(socioDTO.getIdsocio());
         }
-        model.addAttribute("socio",socioDTO);
-        model.addAttribute("totalDeuda",totalDeuda);
-        model.addAttribute("numero_carnet",numero_carnet);
+        model.addAttribute("socio", socioDTO);
+        model.addAttribute("totalDeuda", totalDeuda);
+        model.addAttribute("numero_carnet", numero_carnet);
 
         return "RealizarPago";
     }
 
     @GetMapping("/paginaspago")
-    public String paginaspago(Model model){ return "ConsultarDeuda";}
+    public String paginaspago(Model model) {
+        return "ConsultarDeuda";
+    }
 
     @GetMapping("/asignarrol")
-    public String asignarrol(Model model)
-    {
+    public String asignarrol(Model model) {
         return "AsignarRol";
     }
 
     @GetMapping("/menusocio")
-    public String menusocio(HttpSession session, Model model)
-    {
-        String token=(String) session.getAttribute("jwtToken");
+    public String menusocio(HttpSession session, Model model) {
+        String token = (String) session.getAttribute("jwtToken");
 
-        if(token ==null || !jwtUtil.validateToken(token))
-        {
-            model.addAttribute("error","Sesión expirada o no válida. Inicie sesión nuevamente.");
+        if (token == null || !jwtUtil.validateToken(token)) {
+            model.addAttribute("error", "Sesión expirada o no válida. Inicie sesión nuevamente.");
             return "Login";
         }
-        SocioDTO socio=(SocioDTO) session.getAttribute("socioLogeado");
-        model.addAttribute("socio",socio);
+        SocioDTO socio = (SocioDTO) session.getAttribute("socioLogeado");
+        model.addAttribute("socio", socio);
         return "MenuSocio";
     }
 
-
     @GetMapping("/presidente")
-    public String presidente(HttpSession session, Model model)
-    {
-        String token=(String) session.getAttribute("jwtToken");
+    public String presidente(HttpSession session, Model model) {
+        String token = (String) session.getAttribute("jwtToken");
 
-        if(token ==null || !jwtUtil.validateToken(token))
-        {
-            model.addAttribute("error","Sesión expirada o no válida. Inicie sesión nuevamente.");
+        if (token == null || !jwtUtil.validateToken(token)) {
+            model.addAttribute("error", "Sesión expirada o no válida. Inicie sesión nuevamente.");
             return "Login";
         }
-        //SocioDTO socio=(SocioDTO) session.getAttribute("socioLogeado");
-        //model.addAttribute("socio",socio);
-        //model.addAttribute("dashboardData",dashboardService.getDashboardData());
+        // SocioDTO socio=(SocioDTO) session.getAttribute("socioLogeado");
+        // model.addAttribute("socio",socio);
+        // model.addAttribute("dashboardData",dashboardService.getDashboardData());
         return "redirect:/Dashboard/dashboard";
     }
-    @GetMapping("/menusecretaria")
-    public String menusecretaria(HttpSession session, Model model)
-    {
-        String token=(String) session.getAttribute("jwtToken");
 
-        if(token ==null || !jwtUtil.validateToken(token))
-        {
-            model.addAttribute("error","Sesión expirada o no válida. Inicie sesión nuevamente.");
+    @GetMapping("/menusecretaria")
+    public String menusecretaria(HttpSession session, Model model) {
+        String token = (String) session.getAttribute("jwtToken");
+
+        if (token == null || !jwtUtil.validateToken(token)) {
+            model.addAttribute("error", "Sesión expirada o no válida. Inicie sesión nuevamente.");
             return "Login";
         }
-        SocioDTO socio=(SocioDTO) session.getAttribute("socioLogeado");
-        model.addAttribute("socio",socio);
+        SocioDTO socio = (SocioDTO) session.getAttribute("socioLogeado");
+        model.addAttribute("socio", socio);
         return "MenuSecretaria";
     }
 
     @GetMapping("/delegadoporrubro")
-    public String delegadoporrubro(HttpSession session, Model model)
-    {
-        String token=(String) session.getAttribute("jwtToken");
+    public String delegadoporrubro(HttpSession session, Model model) {
+        String token = (String) session.getAttribute("jwtToken");
 
-        if(token ==null || !jwtUtil.validateToken(token))
-        {
-            model.addAttribute("error","Sesión expirada o no válida. Inicie sesión nuevamente.");
+        if (token == null || !jwtUtil.validateToken(token)) {
+            model.addAttribute("error", "Sesión expirada o no válida. Inicie sesión nuevamente.");
             return "Login";
         }
-        SocioDTO socio=(SocioDTO) session.getAttribute("socioLogeado");
-        model.addAttribute("socio",socio);
+        SocioDTO socio = (SocioDTO) session.getAttribute("socioLogeado");
+        model.addAttribute("socio", socio);
         return "MenuDelegadoPorRubro";
     }
 
     @GetMapping("/tesorera")
-    public String tesorera(HttpSession session,Model model)
-    {
-        String token=(String) session.getAttribute("jwtToken");
+    public String tesorera(HttpSession session, Model model) {
+        String token = (String) session.getAttribute("jwtToken");
 
-        if(token ==null || !jwtUtil.validateToken(token))
-        {
-            model.addAttribute("error","Sesión expirada o no válida. Inicie sesión nuevamente.");
+        if (token == null || !jwtUtil.validateToken(token)) {
+            model.addAttribute("error", "Sesión expirada o no válida. Inicie sesión nuevamente.");
             return "Login";
         }
-        SocioDTO socio=(SocioDTO) session.getAttribute("socioLogeado");
-        model.addAttribute("socio",socio);
+        SocioDTO socio = (SocioDTO) session.getAttribute("socioLogeado");
+        model.addAttribute("socio", socio);
 
         return "redirect:/movimiento/ListaMovimientos";
 
     }
 
     @GetMapping("/dirigente")
-    public String dirigente(HttpSession session,Model model)
-    {
-        String token=(String) session.getAttribute("jwtToken");
+    public String dirigente(HttpSession session, Model model) {
+        String token = (String) session.getAttribute("jwtToken");
 
-        if(token ==null || !jwtUtil.validateToken(token))
-        {
-            model.addAttribute("error","Sesión expirada o no válida. Inicie sesión nuevamente.");
+        if (token == null || !jwtUtil.validateToken(token)) {
+            model.addAttribute("error", "Sesión expirada o no válida. Inicie sesión nuevamente.");
             return "Login";
         }
-        SocioDTO socio=(SocioDTO) session.getAttribute("socioLogeado");
-        model.addAttribute("socio",socio);
+        SocioDTO socio = (SocioDTO) session.getAttribute("socioLogeado");
+        model.addAttribute("socio", socio);
 
         return "MenuDirigente";
 
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session, Model model)
-    {   //elimina toda la sesión todos los atribuos token, socioLogeadoo, etc
+    public String logout(HttpSession session, Model model) { // elimina toda la sesión todos los atribuos token,
+                                                             // socioLogeadoo, etc
         session.invalidate();
-        //mensaje opcional
+        // mensaje opcional
         model.addAttribute("mensaje", "Sesión cerrada correctamente.");
         return "Login";
     }
 
-    //mETODO QUE pasa toda la información a la página Realizar pago para que muestre en Relizar pago
-    //el total pagos  y el saldo pendiente.
+    // mETODO QUE pasa toda la información a la página Realizar pago para que
+    // muestre en Relizar pago
+    // el total pagos y el saldo pendiente.
     @GetMapping("/paginaRegresarRealizarPago")
-    public String paginaRegresarRealizarPago( @RequestParam("iddeuda") Integer iddeuda, Model model)
-    {
+    public String paginaRegresarRealizarPago(@RequestParam("iddeuda") Integer iddeuda, Model model) {
 
         DeudaEntity deuda = deudaService.obtenerDeudaPorId(iddeuda);
         if (deuda == null) {
@@ -317,15 +293,10 @@ public class PaginasController {
 
     }
 
-
     /*
-    @GetMapping("/ListaMoovimientos")
-    public String ListaMovimientos()
-
-*/
-
-
-
+     * @GetMapping("/ListaMoovimientos")
+     * public String ListaMovimientos()
+     * 
+     */
 
 }
-

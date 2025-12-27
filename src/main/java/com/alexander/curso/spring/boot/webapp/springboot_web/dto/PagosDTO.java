@@ -6,18 +6,17 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
-public class PagosDTO
-{
+public class PagosDTO {
     private Integer idpago;
     private Integer iddeuda;
     private LocalDate fecha;
     private BigDecimal monto;
     private String carnetRegistrador;
     private String nombreRegistrador;
+    private String nombreSocio;
+    private String apellidoSocio;
 
-
-    //meotodos getter and setter
-
+    // meotodos getter and setter
 
     public String getNombreRegistrador() {
         return nombreRegistrador;

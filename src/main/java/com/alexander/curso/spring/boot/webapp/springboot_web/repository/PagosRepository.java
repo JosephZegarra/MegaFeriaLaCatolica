@@ -10,13 +10,21 @@ import java.util.List;
 public interface PagosRepository extends JpaRepository<PagosEntity, Integer> {
 
     @Query("""
-    SELECT p 
-    FROM PagosEntity p
-    JOIN p.deuda d
-    JOIN d.socioAsistenciaEntity sa
-    JOIN sa.socio s
-    WHERE s.id = :idsocio
-""")
+                SELECT p
+                FROM PagosEntity p
+                JOIN p.deuda d
+                JOIN d.socioAsistenciaEntity sa
+                JOIN sa.socio s
+                WHERE s.id = :idsocio
+            """)
     List<PagosEntity> findPagosByIdSocio(@Param("idsocio") Integer idsocio);
+
+    // Obtener todos los pagos ordenados por fecha descendente
+    @Query("""
+                SELECT p
+                FROM PagosEntity p
+                ORDER BY p.fecha DESC
+            """)
+    List<PagosEntity> findAllPagosOrderByFechaDesc();
 
 }
