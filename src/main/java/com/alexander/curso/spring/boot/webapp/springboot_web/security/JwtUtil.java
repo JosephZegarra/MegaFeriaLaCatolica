@@ -7,49 +7,49 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import java.security.Key;
 import java.util.Date;
 
 @Component
-public class JwtUtil
-{
-    private final String secret = "MiClaveSecretaMuyLargaParaJWT1234567890";
-    private final long expiration=1000*60*60*24;
+public class JwtUtil {
+    @Value("${jwt.secret}")
+    private String secret;
 
-    private Key getSigningKey(){
+    @Value("${jwt.expiration}")
+    private long expiration;
+
+    private Key getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    //Generar token JWT
-    public String generateToken(String username)
-    {
+    // Generar token JWT
+    public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis()+expiration))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256).compact();
     }
 
-    //Validar Token
-    public boolean validateToken(String token)
-    {
-        try{
+    // Validar Token
+    public boolean validateToken(String token) {
+        try {
             Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
             return true;
-        } catch(JwtException e)
-        {
+        } catch (JwtException e) {
             return false;
         }
     }
 
-    //obtener el username del token
-    public String getUsernameFromToken(String token)
-    {
-        Claims claims=Jwts.parserBuilder()
+    // obtener el username del token
+    public String getUsernameFromToken(String token) {
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        return  claims.getSubject();
+        return claims.getSubject();
     }
 }
