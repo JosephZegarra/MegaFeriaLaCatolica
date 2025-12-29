@@ -1,6 +1,5 @@
 package com.alexander.curso.spring.boot.webapp.springboot_web.controller;
 
-
 import com.alexander.curso.spring.boot.webapp.springboot_web.dto.LoginRequestDTO;
 import com.alexander.curso.spring.boot.webapp.springboot_web.dto.SocioDTO;
 import com.alexander.curso.spring.boot.webapp.springboot_web.entity.SocioEntity;
@@ -14,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/socios")//Mapea las rutas
-//Se encarga de escuchar y responder las peticiones del cliente
+@RequestMapping("/api/socios") // Mapea las rutas
+// Se encarga de escuchar y responder las peticiones del cliente
 public class SocioJsonController {
     @Autowired
     private SocioService socioService;
@@ -40,18 +40,20 @@ public class SocioJsonController {
 
     @Autowired
     private SocioMapper socioMapper;
-    //METODOS DEL CRUD
+    // METODOS DEL CRUD
 
+    @PreAuthorize("hasAnyAuthority('Presidente', 'Secretaria')")
     @GetMapping("/listar")
     public ResponseEntity<List<SocioDTO>> listar() {
         return new ResponseEntity<>(socioService.listar(), HttpStatus.OK);
     }
+
+    @PreAuthorize("hasAuthority('Presidente')")
     @PostMapping("/editarsocio")
     public ResponseEntity<?> editarSocio(@RequestBody SocioDTO socio) {
         socioService.editar(socio);
         return ResponseEntity.ok().body(
-                Map.of("message", "Socio actualizado correctamente")
-        );
+                Map.of("message", "Socio actualizado correctamente"));
     }
 
     @PostMapping("/ver")
@@ -62,28 +64,24 @@ public class SocioJsonController {
             return ResponseEntity.status(404).body(
                     Map.of(
                             "message", "Socio no encontrado",
-                            "idBuscado", idsocio
-                    )
-            );
+                            "idBuscado", idsocio));
         }
 
         return ResponseEntity.ok(
                 Map.of(
                         "message", "Socio obtenido correctamente",
-                        "socio", socio
-                )
-        );
+                        "socio", socio));
     }
 
+    @PreAuthorize("hasAuthority('Presidente')")
     @PostMapping("/borrar")
     public ResponseEntity<?> borrarSocio(@RequestParam Integer idsocio) {
         socioService.borrar(idsocio);
         return ResponseEntity.ok().body(
-                Map.of("message", "Socio eliminado correctamente")
-        );
+                Map.of("message", "Socio eliminado correctamente"));
     }
 
-    //Confirmar correo electronico
+    // Confirmar correo electronico
     @GetMapping("/confirmarcorreo")
     public ResponseEntity<Map<String, Object>> confirmarCorreo(@RequestParam("token") String token) {
 
@@ -102,8 +100,7 @@ public class SocioJsonController {
         }
     }
 
-
-    //Guardar Socio
+    // Guardar Socio
     @PostMapping("/guardarsocio")
     public ResponseEntity<?> guardarSocio(@RequestBody SocioDTO socio) {
 
@@ -130,10 +127,6 @@ public class SocioJsonController {
         }
     }
 
-
-
-
-
     @PostMapping("/buscarsocio")
     public ResponseEntity<?> buscarsocio(
             @RequestBody LoginRequestDTO request,
@@ -158,10 +151,13 @@ public class SocioJsonController {
         if (Boolean.TRUE.equals(socioEntity.getCuenta_bloqueada())) {
             LocalDateTime fechaBloqueo = socioEntity.getFecha_bloqueo();
             if (fechaBloqueo != null) {
-                long minutos = Duration.between(fechaBloqueo, LocalDateTime.now()).toMinutes();//calucla cuanto a pasado desde la fecha de bloqueo hasta ahora.
+                long minutos = Duration.between(fechaBloqueo, LocalDateTime.now()).toMinutes();// calucla cuanto a
+                                                                                               // pasado desde la fecha
+                                                                                               // de bloqueo hasta
+                                                                                               // ahora.
                 if (minutos < 5) {
                     json.put("error", "Cuenta bloqueada. Intente en " + (5 - minutos) + " minutos.");
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(json);//eror 401
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(json);// eror 401
                 }
                 // desbloqueo automático
                 socioEntity.setCuenta_bloqueada(false);

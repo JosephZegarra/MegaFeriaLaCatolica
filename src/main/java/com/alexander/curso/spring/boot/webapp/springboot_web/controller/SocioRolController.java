@@ -14,14 +14,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.time.LocalDate;
 import java.util.Date;
 
 @Controller
 @RequestMapping("/sociorol")
-public class SocioRolController
-{
+public class SocioRolController {
     @Autowired
     private SocioService socioService;
 
@@ -34,35 +34,30 @@ public class SocioRolController
     @Autowired
     private SocioRolService socioRolService;
 
+    @PreAuthorize("hasAuthority('Presidente')")
     @PostMapping("/guardarrol")
     public String guardarrol(@RequestParam("numero_carnet") String numero_carnet,
-                             @RequestParam("rol") String rol,
-                             @RequestParam("fechainicio") LocalDate fechainicio,
-                             @RequestParam("fechafin")LocalDate fechafin,
-                             Model model)
-    {
-        //socioService.
+            @RequestParam("rol") String rol,
+            @RequestParam("fechainicio") LocalDate fechainicio,
+            @RequestParam("fechafin") LocalDate fechafin,
+            Model model) {
+        // socioService.
 
-          SocioDTO socioDTO=socioService.BuscarPorNumero_Carnet(numero_carnet);
-          if(socioDTO==null)
-          {
-              model.addAttribute("error","El número de CARNET que ha ingresado no existe en el sistema");
-              return "AsignarRol";
-          }
+        SocioDTO socioDTO = socioService.BuscarPorNumero_Carnet(numero_carnet);
+        if (socioDTO == null) {
+            model.addAttribute("error", "El número de CARNET que ha ingresado no existe en el sistema");
+            return "AsignarRol";
+        }
 
-          if(fechafin.isBefore(fechainicio))
-          {
-              model.addAttribute("error","La fecha final no puede ser menor que la fecha de inicio ");
-              return "AsignarRol";
-          }
+        if (fechafin.isBefore(fechainicio)) {
+            model.addAttribute("error", "La fecha final no puede ser menor que la fecha de inicio ");
+            return "AsignarRol";
+        }
 
-          RolDTO rolDTO=rolService.buscarpornombre(rol);
-          socioRolService.guardar(socioDTO,rolDTO,fechainicio,fechafin);
+        RolDTO rolDTO = rolService.buscarpornombre(rol);
+        socioRolService.guardar(socioDTO, rolDTO, fechainicio, fechafin);
 
-
-
-
-        //modificar aca
+        // modificar aca
         return "MenuSecretaria";
     }
 }
